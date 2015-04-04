@@ -79,6 +79,32 @@ recipe.size.regex=^(?:\.text|\.data|\.rodata|\.irom0\.text|)\s+([0-9]+).*
 #recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
 #recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*
 
+
+# begin, added by Jeroen Beemster April 4 2015
+tools.esptool.path={runtime.tools.esptool.path}
+tools.esptool.cmd.path={path}/esptool
+#tools.esptool.cmd.path={path}/bin/esptool  ---->  bin removed Jeroen Beemster april 2015
+tools.esptool.config.path={path}/etc/esptool.conf
+tools.esptool.upload.params.verbose=-v
+tools.esptool.upload.params.quiet=-q -q
+tools.esptool.upload.pattern="{cmd.path}" "-C{config.path}" {upload.verbose} -p{build.mcu} -c{upload.protocol} -P{serial.port} -b{upload.speed} -D "-Uflash:w:{build.path}/{build.project_name}.hex:i"
+
+tools.esptool.program.params.verbose=-v
+tools.esptool.program.params.quiet=-q -q
+tools.esptool.program.pattern="{cmd.path}" "-C{config.path}" {program.verbose} -p{build.mcu} -c{protocol} {program.extra_params} "-Uflash:w:{build.path}/{build.project_name}.hex:i"
+
+tools.esptool.erase.params.verbose=-v
+tools.esptool.erase.params.quiet=-q -q
+#tools.esptool.erase.pattern="{cmd.path}" "-C{config.path}" {erase.verbose} -p{build.mcu} -c{protocol} {program.extra_params} -e -Ulock:w:{bootloader.unlock_bits}:m -Uefuse:w:{bootloader.extended_fuses}:m -Uhfuse:w:{bootloader.high_fuses}:m -Ulfuse:w:{bootloader.low_fuses}:m
+tools.esptool.erase.pattern="{cmd.path}" "" -v -cp {serial.port} -cb {upload.speed} -cd none -ca 0x00000 -cf "{config.path}bin/boot_v1.2.bin" -ca 0x01000 -cf "{config.path}bin/at/user1.512.new.bin" -ca 0x3e000 -cf "{config.path}bin/blank.bin" -ca 0x7e000 -cf "{config.path}bin/blank.bin"
+#jeroen beemster April 1 2015  2lines above changed 
+
+
+tools.esptool.bootloader.params.verbose=-v
+tools.esptool.bootloader.params.quiet=-q -q
+tools.esptool.bootloader.pattern="{cmd.path}" "-C{config.path}" {bootloader.verbose} -p{build.mcu} -c{protocol} {program.extra_params} "-Uflash:w:{runtime.platform.path}/bootloaders/{bootloader.file}:i" -Ulock:w:{bootloader.lock_bits}:m
+# end, added by Jeroen Beemster April 4 2015
+
 # ------------------------------
 
 tools.esptool.cmd=esptool
