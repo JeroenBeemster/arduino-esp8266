@@ -4,6 +4,7 @@
  
 const char* ssid = "...............";
 const char* password = "...............";
+void* __dso_handle;
 
 
 ESP8266WebServer server(80);

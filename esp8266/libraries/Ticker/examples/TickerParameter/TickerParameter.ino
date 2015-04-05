@@ -13,6 +13,7 @@
 */
 
 #include <Ticker.h>
+void* __dso_handle;
 
 Ticker tickerSetHigh;
 Ticker tickerSetLow;

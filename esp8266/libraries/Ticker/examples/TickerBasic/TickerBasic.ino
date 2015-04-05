@@ -14,6 +14,7 @@
 */
 
 #include <Ticker.h>
+void* __dso_handle;
 
 Ticker flipper;
 
